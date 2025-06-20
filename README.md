@@ -10,43 +10,43 @@ Source: Built-in iris dataset in R
 
 Features Used:
 
-Sepal Length (numeric)
+- Sepal Length (numeric)
 
-Petal Length (numeric)
+- Petal Length (numeric)
 
-Goal: Predict Petal.Length using Sepal.Length
+- Goal: Predict Petal.Length using Sepal.Length
 
 ## 🧪 Methodology
 Exploratory Data Analysis:
 
-Scatterplot created to visualize the relationship between Sepal.Length and Petal.Length.
+- Scatterplot created to visualize the relationship between Sepal.Length and Petal.Length.
 
 Modeling Techniques:
 
-Linear Regression
+- Linear Regression
 
-Polynomial Regression (Degree 2)
+- Polynomial Regression (Degree 2)
 
 Validation Techniques:
 
-Validation Set Approach (50/50 train-test split)
+- Validation Set Approach (50/50 train-test split)
 
-Leave-One-Out Cross Validation (LOOCV)
+- Leave-One-Out Cross Validation (LOOCV)
 
-k-Fold Cross Validation (with varying k)
+- k-Fold Cross Validation (with varying k)
 
 ## 📈 Key Steps in the RMarkdown
-Load and explore the iris dataset.
+1. Load and explore the iris dataset.
 
-Visualize the data using base R plotting.
+2. Visualize the data using base R plotting.
 
-Split the dataset into training and testing sets.
+3. Split the dataset into training and testing sets.
 
-Fit both linear and quadratic regression models.
+4. Fit both linear and quadratic regression models.
 
-Evaluate performance using multiple cross-validation techniques.
+5. Evaluate performance using multiple cross-validation techniques.
 
-Compare models based on Mean Squared Error (MSE).
+6. Compare models based on Mean Squared Error (MSE).
 
 ## 📊 Results Summary
 The quadratic model generally produced lower MSEs across cross-validation techniques.

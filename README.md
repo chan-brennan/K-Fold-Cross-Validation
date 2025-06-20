@@ -83,4 +83,5 @@ Each technique gives an estimate of prediction error using **Mean Squared Error 
 To generate the PDF from the `.Rmd` file, run this in your R console:
 
 ```r
-rmarkdown::render("HonorsProject_UPDATED.Rmd")
+rmarkdown::render("KCrossValidation.Rmd")
+

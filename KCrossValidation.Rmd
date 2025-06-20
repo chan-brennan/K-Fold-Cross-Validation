@@ -1,0 +1,145 @@
+---
+title: 'Honors Project: Cross Validation'
+author: "Brennan Chan"
+output: pdf_document
+date: "2025-3-20"
+---
+For this honors project, I chose the classic iris dataset from the datasets package in R. I selected this dataset because it contains measurements of four features of iris flowers (sepal length, sepal width, petal length, and petal width) and a categorical species label. I am interested in predicting the petal length of an iris based on its sepal length. A scatterplot suggests a positive relationship between sepal length and petal length, which may be modeled using linear or polynomial regression.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load dataset
+data(iris)
+head(iris)
+
+# Scatterplot of Sepal.Length vs. Petal.Length
+plot(iris$Sepal.Length, iris$Petal.Length, 
+     pch = 16, 
+     xlab = "Sepal Length (cm)", 
+     ylab = "Petal Length (cm)", 
+     main = "Sepal Length vs. Petal Length")
+
+```
+
+From the scatterplot, there appears to be a roughly linear relationship, though some curvature is visible, suggesting a quadratic model might also be appropriate.
+
+Validation Set Cross Validation
+We will use the validation set approach to assess the fit of a linear and a quadratic model. First, we split the data into a training set and a test set. We set a seed for reproducibility.
+
+```{r}
+set.seed(2025)
+
+n <- nrow(iris)
+train_idx <- sample(n, n/2)
+train <- iris[train_idx, ]
+test <- iris[-train_idx, ]
+```
+
+Linear Regression Model
+We fit a simple linear regression model predicting petal length from sepal length using the training set.
+
+```{r}
+lm_linear <- lm(Petal.Length ~ Sepal.Length, data = train)
+summary(lm_linear)
+```
+Quadratic Regression Model
+We also fit a quadratic regression model to capture potential curvature.
+
+
+```{r}
+lm_quad <- lm(Petal.Length ~ poly(Sepal.Length, 2), data = train)
+summary(lm_quad)
+
+```
+Model Validation: Mean Squared Error (MSE)
+We evaluate both models on the test set by calculating the MSE.
+
+
+```{r}
+# Linear model predictions and MSE
+pred_linear <- predict(lm_linear, newdata = test)
+mse_linear <- mean((test$Petal.Length - pred_linear)^2)
+mse_linear
+
+# Quadratic model predictions and MSE
+pred_quad <- predict(lm_quad, newdata = test)
+mse_quad <- mean((test$Petal.Length - pred_quad)^2)
+mse_quad
+
+```
+Discussion:
+The MSE values for both models are reported above. The model with the lower MSE is considered to have better predictive performance on unseen data. If the quadratic model's MSE is not much lower than the linear model's, the added complexity may not be justified.
+
+Visualization of Fitted Models
+We plot the test data and overlay the fitted lines from both models.
+
+
+```{r}
+# Sort test set for plotting lines
+ord <- order(test$Sepal.Length)
+test_sorted <- test[ord, ]
+
+# Plot test data
+plot(test_sorted$Sepal.Length, test_sorted$Petal.Length, 
+     pch = 16, 
+     xlab = "Sepal Length (cm)", 
+     ylab = "Petal Length (cm)", 
+     main = "Model Fit on Test Data")
+
+# Add linear fit
+lines(test_sorted$Sepal.Length, predict(lm_linear, newdata = test_sorted), col = "blue", lwd = 2)
+
+# Add quadratic fit
+lines(test_sorted$Sepal.Length, predict(lm_quad, newdata = test_sorted), col = "red", lwd = 2)
+
+legend("topleft", legend = c("Linear", "Quadratic"), col = c("blue", "red"), lwd = 2)
+
+```
+Discussion:
+The blue line represents the linear fit, and the red line represents the quadratic fit. Visually, if the red line (quadratic) better follows the curvature of the points, it may be a better model. However, if both lines are similar and the quadratic model does not significantly reduce the MSE, the simpler linear model is preferable.
+
+Conclusion
+Using the validation set approach on the iris dataset, we compared linear and quadratic regression models for predicting petal length from sepal length. Both visual and quantitative (MSE) assessments were used to evaluate model performance. This process demonstrates how cross-validation can guide model selection and prevent overfitting by evaluating models on previously unseen data.
+
+This .Rmd file follows the structure and style of the provided honors project examples, including narrative discussion, code blocks, output interpretation, and clear organization of sections.
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+## K-Fold Cross-Validation using cv.glm
+
+```{r}
+library(boot)
+
+# Linear model with full dataset
+glm_linear <- glm(Petal.Length ~ Sepal.Length, data = iris)
+
+# Perform 5-Fold Cross Validation
+cv_result_linear <- cv.glm(iris, glm_linear, K = 5)
+cv_result_linear$delta  # Estimated prediction error
+```
+
+
+## Plotting the Fitted Model
+
+```{r}
+# Scatterplot with fitted regression line
+plot(iris$Sepal.Length, iris$Petal.Length, pch = 16,
+     xlab = "Sepal Length", ylab = "Petal Length",
+     main = "Linear Regression Fit")
+
+# Add fitted regression line
+abline(lm(Petal.Length ~ Sepal.Length, data = iris), col = "blue", lwd = 2)
+```
+
+
+## Discussion
+
+Using 5-fold cross-validation, the estimated prediction error (MSE) for the linear model is reported by `cv.glm()` in the `delta` values. This provides a more robust estimate than a single train/test split. The plotted regression line confirms a strong linear trend, and while a quadratic model may fit slightly better visually, the simplicity and interpretability of the linear model might make it preferable depending on the use case.

@@ -1,6 +1,6 @@
 # K-Fold Cross Validation – Honors Project
 
-**File**: `HonorsProject_UPDATED.Rmd`  
+**File**: `KCrossValidation.Rmd`  
 **Author**: Brennan Chan  
 **Date**: March 20, 2025
 
